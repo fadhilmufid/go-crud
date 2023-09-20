@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"go-crud/data/request"
 	"go-crud/helper"
 	"go-crud/model"
 
@@ -50,7 +51,13 @@ func (t *TagsRepositoryImpl) Save(tags model.Tags) {
 }
 
 // Update implements TagsRepository.
-func (*TagsRepositoryImpl) Update(tags model.Tags) {
-	// var updateTag =
+func (t *TagsRepositoryImpl) Updates(tags model.Tags) {
+	var updateTag = request.UpdateTagsRequest{
+		Id : tags.Id,
+		Name : tags.Name,
+	}
+
+	result := t.Db.Model(&tags).Updates(updateTag) 
+	helper.ErrorPanic(result.Error)
 }
 
