@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+	"go-crud/helper"
 	"go-crud/model"
 
 	"gorm.io/gorm"
@@ -15,27 +17,40 @@ func NewTagsRepositoryImpl(Db *gorm.DB) TagsRepository {
 }
 
 // Delete implements TagsRepository.
-func (*TagsRepositoryImpl) Delete(tagsId int) {
-	panic("unimplemented")
+func (t *TagsRepositoryImpl) Delete(tagsId int) {
+	var tags model.Tags
+	result := t.Db.Where("id = ?", tagsId).Delete(&tags)
+	helper.ErrorPanic(result.Error)
 }
 
 // FindAll implements TagsRepository.
-func (*TagsRepositoryImpl) FindAll() []model.Tags {
-	panic("unimplemented")
+func (t *TagsRepositoryImpl) FindAll() []model.Tags {
+	var tags []model.Tags
+	result := t.Db.Find(&tags)
+	helper.ErrorPanic(result.Error)
+	return tags
 }
 
 // FindById implements TagsRepository.
-func (*TagsRepositoryImpl) FindById(tagsId int) (tags model.Tags, err error) {
-	panic("unimplemented")
+func (t *TagsRepositoryImpl) FindById(tagsId int) (tags model.Tags, err error) {
+	var tag model.Tags
+	result := t.Db.Find(&tag, tagsId)
+
+	if result != nil{
+		return tag, nil
+	}else{
+		return tag, errors.New("tag is not found")
+	}
 }
 
 // Save implements TagsRepository.
-func (*TagsRepositoryImpl) Save(tags model.Tags) {
-	panic("unimplemented")
+func (t *TagsRepositoryImpl) Save(tags model.Tags) {
+	result := t.Db.Find(&tags)
+	helper.ErrorPanic(result.Error)
 }
 
 // Update implements TagsRepository.
 func (*TagsRepositoryImpl) Update(tags model.Tags) {
-	panic("unimplemented")
+	// var updateTag =
 }
 
